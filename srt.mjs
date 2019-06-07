@@ -1,7 +1,4 @@
-#!/usr/bin/env node
-"use strict";
-
-class SubripText {
+export default class SubripText {
 	constructor(input = ""){
 		this.entries = [];
 		if(input = String(input).trim())
@@ -98,9 +95,3 @@ SubripText.Subtitle = class {
 			+ String(ms).padStart(3, "0"));
 	}
 };
-
-const fs = require("fs");
-const input = fs.readFileSync("Predators (2010).srt", "utf8");
-let a = new SubripText(input);
-a.offset(1 * 1000);
-fs.writeFileSync("Predators (2010).srt", a.toString());
