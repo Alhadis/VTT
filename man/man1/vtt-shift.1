@@ -1,0 +1,105 @@
+.Dd June 13, 2019
+.Dt VTT-SHIFT 1
+.Os
+.
+.Sh NAME
+.Nm vtt-shift
+.Nd modify subtitle times
+.
+.Sh SYNOPSIS
+.Nm
+.Op Fl bl
+.Op Fl e Ar encoding
+.Ar files No ...
+.Ar amount
+.
+.Sh DESCRIPTION
+.Nm
+offsets each subtitle in the named
+.Ar files
+by the given
+.Ar amount
+of milliseconds.
+If no
+.Ar files
+are specified,
+.Nm
+reads from stdin and writes to stdout.
+The program is useful for correcting out-of-sync subtitles.
+.
+.Bl -tag -width indent
+.It Fl b , -bom
+Insert a byte-order mark (U+FEFF) at the beginning of the output.
+.
+.It Fl e Ar name , Fl -encoding Ns = Ns Ar name
+Specify the character encoding for input and output operations
+.Pq default: Do Li utf8 Dc .
+Supported encoding
+.Ar names
+are:
+.Sy utf8 ,
+.Sy ucs2 ,
+.Sy utf16le ,
+.Sy ascii ,
+.Sy latin1 ,
+and
+.Sy binary .
+Some of these are aliases; refer to Node.js\(cqs
+.Li Buffer
+API for detailed information about encoding types.
+.
+.It Fl l , -line-feeds
+Use LF (Unix-style) line terminators in the output.
+By default, CRLF (Windows-style) newlines are used to maximise compatibility between media players.
+.El
+.
+.Sh EXIT STATUS
+.Ex -std
+.
+.Sh EXAMPLES
+Delay subtitles in
+.Ar file.srt
+by 2.5 seconds:
+.Bd -literal -offset indent
+.Nm Ar file.srt 2500
+.Ed
+.
+.Pp
+Move subtitles 500 milliseconds closer to the beginning of playback:
+.Bd -literal -offset indent
+.Nm Ar file.srt -500
+.Ed
+.
+.Pp
+Force a byte-order mark and LF terminators, but leave timecodes unchanged:
+.Bd -literal -offset indent
+.Nm Fl bl Ar file.srt 0
+.Ed
+.
+.Sh SEE ALSO
+Node.js's
+.Li Buffer
+API
+.Pq Lk https://nodejs.org/api/buffer.html ,
+for details of supported character encodings.
+.
+.Sh AUTHORS
+.An -nosplit
+Copyright \(co 2019
+.An John Gardner Aq Mt gardnerjohng@gmail.com .
+Openly released under the ISC license.
+.
+.Sh CAVEATS
+Timecodes cannot be negative.
+Any times shifted below zero are clamped to
+.Dq Li 00:00:00.000 ,
+causing the original timecodes to be lost.
+Start and end times may both be
+.Aq squashed
+to zero,
+resulting in zero-length subtitle entries.
+This may cause unpredictable behaviour in certain media players.
+.
+.Pp
+Subtitles are ordered by their assigned index, which is not checked for continuity or uniquity.
+Non-linear order is not respected, and duplicate indexes will cause earlier entries to be overwritten.
