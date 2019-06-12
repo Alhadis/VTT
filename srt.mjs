@@ -1,4 +1,4 @@
-import {formatTime, parseTime} from "alhadis.utils/index.mjs";
+import utils from "alhadis.utils";
 
 export default class SubripText {
 	constructor(input = ""){
@@ -36,16 +36,18 @@ SubripText.Subtitle = class {
 		input = String(input).trim().replace(/\r\n?/g, "\n").split("\n");
 		const time = input[1].split(/\s*-->\s*/);
 		this.index = +input[0];
-		this.start = parseTime(time[0]);
-		this.end   = parseTime(time[1]);
+		this.start = utils.parseTime(time[0]);
+		this.end   = utils.parseTime(time[1]);
 		this.text  = input.slice(2).join("\n");
 	}
 	
 	
 	toString(){
+		const start = utils.formatTime(this.start);
+		const end   = utils.formatTime(this.end);
 		return [
 			this.index,
-			`${formatTime(this.start)} --> ${formatTime(this.end)}`.replace(/\./g, ","),
+			`${start} --> ${end}`.replace(/\./g, ","),
 			this.text,
 		].join("\n");
 	}
