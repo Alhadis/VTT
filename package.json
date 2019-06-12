@@ -1,0 +1,12 @@
+{
+	"name": "vtt",
+	"version": "v0.0.0",
+	"description": "Subtitle/CC parsing library",
+	"author": "John Gardner <gardnerjohng@gmail.com>",
+	"repository": "https://github.com/Alhadis/VTT",
+	"main": "./srt.mjs",
+	"license": "ISC",
+	"dependencies": {
+		"alhadis.utils": "*"
+	}
+}

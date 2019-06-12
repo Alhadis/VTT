@@ -1,3 +1,5 @@
+import {formatTime, parseTime} from "alhadis.utils/index.mjs";
+
 export default class SubripText {
 	constructor(input = ""){
 		this.entries = [];
@@ -27,9 +29,6 @@ export default class SubripText {
 	}
 }
 
-const HOUR = 3600000;
-const MIN  = 60000;
-const SEC  = 1000;
 
 SubripText.Subtitle = class {
 	
@@ -37,8 +36,8 @@ SubripText.Subtitle = class {
 		input = String(input).trim().replace(/\r\n?/g, "\n").split("\n");
 		const time = input[1].split(/\s*-->\s*/);
 		this.index = +input[0];
-		this.start = this.parseTime(time[0]);
-		this.end   = this.parseTime(time[1]);
+		this.start = parseTime(time[0]);
+		this.end   = parseTime(time[1]);
 		this.text  = input.slice(2).join("\n");
 	}
 	
@@ -46,52 +45,8 @@ SubripText.Subtitle = class {
 	toString(){
 		return [
 			this.index,
-			`${this.formatTime(this.start)} --> ${this.formatTime(this.end)}`,
+			`${formatTime(this.start)} --> ${formatTime(this.end)}`.replace(/\./g, ","),
 			this.text,
 		].join("\n");
-	}
-	
-	
-	/**
-	 * Parse a timecode string of the form `HH:MM:SS,000`.
-	 * @param {String} input
-	 * @return {Number} Time expressed in milliseconds.
-	 */
-	parseTime(input = ""){
-		input = String(input).trim();
-		if(/^(\d{2}:)?(\d{2}):(\d{2}),(\d{3})$/.test(input)){
-			const hours   = parseInt(RegExp.$1);
-			const minutes = +RegExp.$2;
-			const seconds = +RegExp.$3;
-			const ms      = +RegExp.$4;
-			return (hours * HOUR) + (minutes * MIN) + (seconds * SEC) + ms;
-		}
-		else throw SyntaxError(`Invalid timecode: ${input}`);
-	}
-	
-	
-	/**
-	 * Format a number of milliseconds using the form `HH:MM:SS,000`.
-	 * @param {Number} input
-	 * @return {String}
-	 */
-	formatTime(input = 0){
-		if((input = +input || 0) <= 0)
-			return "00:00:00,000";
-		
-		let hours   = "00";
-		let minutes = "00";
-		let seconds = "00";
-		let ms      = "000";
-		
-		if(input >= HOUR) { hours   = Math.floor(input / HOUR); input %= HOUR; }
-		if(input >= MIN)  { minutes = Math.floor(input / MIN);  input %= MIN;  }
-		if(input >= SEC)  { seconds = Math.floor(input / SEC);  input %= SEC;  }
-		ms = input;
-		
-		return (String(hours).padStart(2, "0") + ":"
-			+ String(minutes).padStart(2, "0") + ":"
-			+ String(seconds).padStart(2, "0") + ","
-			+ String(ms).padStart(3, "0"));
 	}
 };
