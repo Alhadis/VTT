@@ -8,20 +8,24 @@ import getOpts    from "get-options";
 import SubripText from "../srt.mjs";
 
 const {options, argv} = getOpts(process.argv.slice(2), {
-	"-e, --encoding": "<string>",
+	"-b, --bom":        "",
+	"-e, --encoding":   "<string>",
+	"-l, --line-feeds": "",
 }, {
 	noUndefined: true,
 	noMixedOrder: true,
 	terminator: /^--$|^-\.?\d/,
 });
 
+const bom      = !!options.bom;
+const eol      = options.lineFeeds ? "\n" : "\r\n";
 const encoding = options.encoding || "utf8";
 const amount   = utils.parseCSSDuration(argv.pop());
 
 // Invalid offset amount, or not enough arguments
 if(Number.isNaN(amount) || !argv.length && process.stdin.isTTY){
 	const $0 = basename(process.argv[1]);
-	process.stderr.write(`Usage: ${$0} [-e encoding] files ... offset\n`);
+	process.stderr.write(`Usage: ${$0} [-bl] [-e encoding] files ... offset\n`);
 	process.exit(1);
 }
 
@@ -33,7 +37,7 @@ if(argv.length)
 		vtt.offset(amount);
 		
 		// Only write back if contents differ
-		const result = vtt.toString();
+		const result = vtt.toString(eol, bom);
 		if(result !== input)
 			writeFileSync(file, result);
 	}
@@ -50,5 +54,5 @@ else if(!process.stdin.isTTY)
 	}).then(input => {
 		const vtt = new SubripText(input);
 		vtt.offset(amount);
-		process.stdout.write(vtt.toString());
+		process.stdout.write(vtt.toString(eol, bom));
 	});
