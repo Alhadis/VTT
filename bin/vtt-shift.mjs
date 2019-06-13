@@ -1,11 +1,11 @@
-#!/usr/bin/env node --experimental-modules
+#!/usr/bin/env node
 "use strict";
 
+import {parseCSSDuration} from "alhadis.utils";
 import {readFileSync, writeFileSync} from "fs";
 import {basename} from "path";
-import utils      from "alhadis.utils";
 import getOpts    from "get-options";
-import SubripText from "../srt.mjs";
+import SubripText from "../lib/srt.mjs";
 
 const {options, argv} = getOpts(process.argv.slice(2), {
 	"-b, --bom":        "",
@@ -20,7 +20,7 @@ const {options, argv} = getOpts(process.argv.slice(2), {
 const bom      = !!options.bom;
 const eol      = options.lineFeeds ? "\n" : "\r\n";
 const encoding = options.encoding || "utf8";
-const amount   = utils.parseCSSDuration(argv.pop());
+const amount   = parseCSSDuration(argv.pop());
 
 // Invalid offset amount, or not enough arguments
 if(Number.isNaN(amount) || !argv.length && process.stdin.isTTY){

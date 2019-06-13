@@ -20,3 +20,6 @@ package-lock.json
 # Project-specific
 *.srt
 *.vtt
+/lib/index.js
+/bin/*
+!/bin/*.mjs
