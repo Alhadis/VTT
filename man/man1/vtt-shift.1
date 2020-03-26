@@ -1,4 +1,4 @@
-.Dd June 13, 2019
+.Dd March 27, 2020
 .Dt VTT-SHIFT 1
 .Os
 .
@@ -12,6 +12,10 @@
 .Op Fl K Ar encoding
 .Ar files No ...
 .Ar amount
+.Nm
+.Op Fl v | -version
+.Nm
+.Op Fl h | -help
 .
 .Sh DESCRIPTION
 .Nm
@@ -30,6 +34,9 @@ The program is useful for correcting out-of-sync subtitles.
 .Bl -tag -width indent
 .It Fl b , -bom
 Insert a byte-order mark (U+FEFF) at the beginning of the output.
+.
+.It Fl h , -help
+Print a short usage summary to stderr and exit.
 .
 .It Fl K Ar name , Fl -encoding Ns = Ns Ar name
 Specify the character encoding for input and output operations
@@ -51,6 +58,9 @@ API for detailed information about encoding types.
 .It Fl l , -line-feeds
 Use LF (Unix-style) line terminators in the output.
 By default, CRLF (Windows-style) newlines are used to maximise compatibility between media players.
+.
+.It Fl -version
+Print the program's version string to stdout and exit.
 .El
 .
 .Sh EXIT STATUS
@@ -85,7 +95,7 @@ for details of supported character encodings.
 .
 .Sh AUTHORS
 .An -nosplit
-Copyright \(co 2019
+Copyright \(co 2019-2020
 .An John Gardner Aq Mt gardnerjohng@gmail.com .
 Openly released under the ISC license.
 .

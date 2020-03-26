@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import {readFileSync, writeFileSync} from "fs";
+import {dirname, resolve, basename} from "path";
+import {fileURLToPath} from "url";
 import getOpts    from "get-options";
 import SubripText from "../lib/srt.mjs";
 
@@ -8,9 +10,11 @@ const {options, argv} = getOpts(process.argv.slice(2), {
 	"-a, --actions":    "",
 	"-b, --bom":        "",
 	"-e, --expr":       "[pattern]",
+	"-h, --help":       "",
 	"-K, --encoding":   "[name]",
 	"-l, --line-feeds": "",
 	"-v, --verbose":    "",
+	"--version":        "",
 }, {
 	duplicates: "append",
 	noAliasPropagation: "first-only",
@@ -18,6 +22,20 @@ const {options, argv} = getOpts(process.argv.slice(2), {
 	noMixedOrder: true,
 	terminator: /^--$|^-\.?\d/,
 });
+
+// Print the program's version, then exit
+if(options.version){
+	const pkgFile = resolve(dirname(fileURLToPath(import.meta.url)), "../package.json");
+	process.stdout.write(JSON.parse(readFileSync(pkgFile, "utf8")).version + "\n");
+	process.exit(0);
+}
+
+// Print a usage summary if requested, or if insufficient arguments are given
+if(options.help || !argv.length && process.stdin.isTTY){
+	const $0 = basename(process.argv[1]);
+	process.stderr.write(`Usage: ${$0} [-ablv] [-e pattern] [-K encoding] files ...\n`);
+	process.exit(+!options.help);
+}
 
 const bom      = !!options.bom;
 const eol      = options.lineFeeds ? "\n" : "\r\n";

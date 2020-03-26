@@ -12,6 +12,10 @@
 .Op Fl e Ar pattern
 .Op Fl K Ar encoding
 .Ar files No ...
+.Nm
+.Op Fl v | -version
+.Nm
+.Op Fl h | -help
 .
 .Sh DESCRIPTION
 .Nm
@@ -26,13 +30,16 @@ reads from standard input instead.
 .
 .Bl -tag -width indent
 .It Fl a , -actions
-Remove subtitles whose text is enclosed within
+Remove subtitles enclosed entirely in
 .Bq square
 or
 .Pq round
 brackets.
 Analoguous to using
 .Ql -e \(aq^\e[\.+\e]$|^\e(.+\e)$\(aq .
+.
+.It Fl b , -bom
+Insert a byte-order mark (U+FEFF) at the beginning of the output.
 .
 .It Fl e Ar pattern , Fl -expr Ar pattern
 An ECMAScript-compatible regular expression matching the text of unwanted subtitles.
@@ -46,10 +53,10 @@ can also be expressed as
 .Ql (?i)foo .
 This option may be specified multiple times.
 .
-.It Fl b , -bom
-Insert a byte-order mark (U+FEFF) at the beginning of the output.
+.It Fl h , -help
+Print a short usage summary to standard error, then exit.
 .
-.It Fl e Ar name , Fl -encoding Ns = Ns Ar name
+.It Fl K Ar name , Fl -encoding Ns = Ns Ar name
 Specify the character encoding for input and output operations
 .Pq default: Do Li utf8 Dc .
 Supported encoding
@@ -72,6 +79,9 @@ By default, CRLF (Windows-style) newlines are used to maximise compatibility bet
 .
 .It Fl v , -verbose
 Print filtered subtitles to standard error.
+.
+.It Fl -version
+Print the program's version string to stdout, then exit.
 .El
 .
 .Sh EXIT STATUS
