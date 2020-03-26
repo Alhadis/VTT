@@ -1,0 +1,105 @@
+.Dd March 27, 2020
+.Dt VTT-FILTER 1
+.Os
+.
+.Sh NAME
+.Nm vtt-filter
+.Nd remove unwanted subtitles
+.
+.Sh SYNOPSIS
+.Nm
+.Op Fl ablv
+.Op Fl e Ar pattern
+.Op Fl K Ar encoding
+.Ar files No ...
+.
+.Sh DESCRIPTION
+.Nm
+removes subtitles that match one or more
+.Ar patterns ,
+modifying each file in-place.
+If no
+.Ar files
+are specified,
+.Nm
+reads from standard input instead.
+.
+.Bl -tag -width indent
+.It Fl a , -actions
+Remove subtitles whose text is enclosed within
+.Bq square
+or
+.Pq round
+brackets.
+Analoguous to using
+.Ql -e \(aq^\e[\.+\e]$|^\e(.+\e)$\(aq .
+.
+.It Fl e Ar pattern , Fl -expr Ar pattern
+An ECMAScript-compatible regular expression matching the text of unwanted subtitles.
+The leading and trailing
+.Ql /
+delimiters are optional;
+if omitted, flags may be specified using a scoped modifier.
+For example,
+.Ql /foo/i
+can also be expressed as
+.Ql (?i)foo .
+This option may be specified multiple times.
+.
+.It Fl b , -bom
+Insert a byte-order mark (U+FEFF) at the beginning of the output.
+.
+.It Fl e Ar name , Fl -encoding Ns = Ns Ar name
+Specify the character encoding for input and output operations
+.Pq default: Do Li utf8 Dc .
+Supported encoding
+.Ar names
+are:
+.Sy utf8 ,
+.Sy ucs2 ,
+.Sy utf16le ,
+.Sy ascii ,
+.Sy latin1 ,
+and
+.Sy binary .
+Some of these are aliases; refer to Node.js\(cqs
+.Li Buffer
+API for detailed information about encoding types.
+.
+.It Fl l , -line-feeds
+Use LF (Unix-style) line terminators in the output.
+By default, CRLF (Windows-style) newlines are used to maximise compatibility between media players.
+.
+.It Fl v , -verbose
+Print filtered subtitles to standard error.
+.El
+.
+.Sh EXIT STATUS
+.Ex -std
+.
+.Sh EXAMPLES
+Remove promotional spam from downloaded subtitles:
+.Bd -literal -offset indent
+.Nm Fl e Ar /OpenSubtitles/i Fl e Ar /yts-\e?subs/i Fl e Ar YIFY No *.srt
+.Ed
+.
+.Pp
+Remove non-verbal subtitles (actions) from
+.Ar file.srt :
+.Bd -literal -offset indent
+.Nm Fl a No file.srt
+.Ed
+.
+.Sh SEE ALSO
+Node.js's
+.Li Buffer
+API
+.Pq Lk https://nodejs.org/api/buffer.html ,
+for details of supported character encodings.
+.
+.Sh AUTHORS
+.An -nosplit
+Copyright \(co 2019-2020
+.An John Gardner Aq Mt gardnerjohng@gmail.com .
+Openly released under the ISC license.
+.
