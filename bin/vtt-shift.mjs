@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-"use strict";
 
 import {parseCSSDuration} from "alhadis.utils";
 import {readFileSync, writeFileSync} from "fs";
