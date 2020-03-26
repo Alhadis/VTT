@@ -8,7 +8,7 @@ import SubripText from "../lib/srt.mjs";
 
 const {options, argv} = getOpts(process.argv.slice(2), {
 	"-b, --bom":        "",
-	"-e, --encoding":   "<string>",
+	"-K, --encoding":   "[string]",
 	"-l, --line-feeds": "",
 }, {
 	noUndefined: true,
@@ -24,7 +24,7 @@ const amount   = parseCSSDuration(argv.pop());
 // Invalid offset amount, or not enough arguments
 if(Number.isNaN(amount) || !argv.length && process.stdin.isTTY){
 	const $0 = basename(process.argv[1]);
-	process.stderr.write(`Usage: ${$0} [-bl] [-e encoding] files ... offset\n`);
+	process.stderr.write(`Usage: ${$0} [-bl] [-K encoding] files ... offset\n`);
 	process.exit(1);
 }
 
