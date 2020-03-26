@@ -5,6 +5,7 @@
 	"author": "John Gardner <gardnerjohng@gmail.com>",
 	"repository": "https://github.com/Alhadis/VTT",
 	"license": "ISC",
+	"main": "./lib/index.mjs",
 	"man": [
 		"./man/man1/vtt-filter.1",
 		"./man/man1/vtt-shift.1"
@@ -14,9 +15,10 @@
 		"vtt-shift":  "./bin/vtt-shift.mjs"
 	},
 	"engines": {
-		"node": ">=12.4.0"
+		"node": ">=13.2.0"
 	},
 	"dependencies": {
+		"alhadis.utils": "<2.0.0",
 		"get-options": "^1.2.0"
 	}
 }
