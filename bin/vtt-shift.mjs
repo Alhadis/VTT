@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import {parseCSSDuration} from "alhadis.utils";
+import {parseDuration} from "alhadis.utils";
 import {readFileSync, writeFileSync} from "fs";
 import {dirname, resolve, basename} from "path";
 import {fileURLToPath} from "url";
@@ -29,7 +29,7 @@ if(options.version){
 const bom      = !!options.bom;
 const eol      = options.lineFeeds ? "\n" : "\r\n";
 const encoding = options.encoding || "utf8";
-const amount   = parseCSSDuration(argv.pop());
+const amount   = parseDuration(argv.pop());
 
 // Invalid offset amount, or not enough arguments (or --help was passed)
 if(options.help || Number.isNaN(amount) || !argv.length && process.stdin.isTTY){
